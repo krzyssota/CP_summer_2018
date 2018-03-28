@@ -3,7 +3,7 @@ package pl.waw.sgh;
 public class Chocolate {
 
     public static void main(String[] args) {
-        int res = makeChocolate(4, 1,7);
+        int res = makeChocolate(4, 1,8);
         System.out.println(res);
     }
 
