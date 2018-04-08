@@ -4,8 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 
-class BrakZwycięzcy extends Exception {}
-
 public class TicTacToe {
     static String FILEPATH = "C:\\Users\\Krzysztof\\Desktop\\tictactoe.csv";
 
@@ -29,7 +27,7 @@ public class TicTacToe {
         return tttTable;
     }
 
-    public static int gameWinner (int[][] state) throws BrakZwycięzcy {
+    public static int gameWinner (int[][] state) {
             //rows
             if (state[0][0] == state[0][1] && state[0][1] == state[0][2] && state[0][0] != 0) {
                 int winner;
@@ -69,7 +67,7 @@ public class TicTacToe {
             }
             // no winner found
 //            return 0;
-            throw new BrakZwycięzcy();
+            throw new RuntimeException();
 
 
 //        for (int i=0;i<2;i++) {
@@ -121,7 +119,7 @@ public class TicTacToe {
         try {
             winner = gameWinner(state);
         }
-        catch (BrakZwycięzcy błąd){
+        catch (RuntimeException e){
             System.out.println("Game not over");
             return;
         }
