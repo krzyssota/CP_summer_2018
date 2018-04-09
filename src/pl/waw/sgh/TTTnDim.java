@@ -8,7 +8,7 @@ public class TTTnDim {
     static String FILEPATH = "C:\\Users\\Krzysztof\\Desktop\\tictactoenDim.csv";
     static int n=5; //chce zeby n bylo rowne tyle ile linijek ma plik ale umiem to zrobić tylko w mainie
 
-    public static int[] readLine(String line) {
+    public static int[] readLine(String line, int n) {
         // "0, -1, 1"  ->  [0, -1, 1]
         int[] elements = new int[n];
         String[] separatedEl = line.split(",");
@@ -20,15 +20,15 @@ public class TTTnDim {
         return elements;
     }
 
-    public static int[][] readTable(String[] lines){
+    public static int[][] readTable(String[] lines, int n){
         int [][] tttTable = new int[n][n];
         for (int i=0;i<n;i++){
-            tttTable[i]=readLine(lines[i]);
+            tttTable[i]=readLine(lines[i],n);
         }
         return tttTable;
     }
 
-    public static int gameWinner (int[][] state) throws RuntimeException {
+    public static int gameWinner (int[][] state, int n) {
         //rows
         for (int i = 0; i < n; i++) {
             innerLoop:
@@ -91,8 +91,8 @@ public class TTTnDim {
 
         int i=0;
         while (scanner.hasNext()){
-            String line = scanner.nextLine();
             i++;
+            System.out.println(i);
         }
         int n = i;
 
@@ -107,7 +107,7 @@ public class TTTnDim {
 
         int[][] state;
         try {
-            state = readTable(lines);
+            state = readTable(lines, n);
         }
         catch(NumberFormatException e){
             System.out.println("Plik zawiera nielegalny znak");
@@ -118,7 +118,7 @@ public class TTTnDim {
 //        winner = gameWinner(state);
 
         try {
-            winner = gameWinner(state);
+            winner = gameWinner(state,n);
         }
         catch (RuntimeException e){
             System.out.println("Game not over");
