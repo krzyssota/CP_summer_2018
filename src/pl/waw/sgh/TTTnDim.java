@@ -6,14 +6,12 @@ import java.util.Scanner;
 
 public class TTTnDim {
     static String FILEPATH = "C:\\Users\\Krzysztof\\Desktop\\tictactoenDim.csv";
-    static int n=5; //chce zeby n bylo rowne tyle ile linijek ma plik ale umiem to zrobić tylko w mainie
 
     public static int[] readLine(String line, int n) {
         // "0, -1, 1"  ->  [0, -1, 1]
         int[] elements = new int[n];
         String[] separatedEl = line.split(",");
         for (int i=0;i<separatedEl.length;i++){
-
             int el = Integer.parseInt(separatedEl[i]);
             elements[i] = el;
         }
@@ -31,47 +29,52 @@ public class TTTnDim {
     public static int gameWinner (int[][] state, int n) {
         //rows
         for (int i = 0; i < n; i++) {
-            innerLoop:
-            for (int j = 0; j < n - 1; j++) {
+            //innerLoop:
+            for (int j = 0; j < n-1; j++) {
                 if (state[i][j] == state[i][j + 1]) {
-                    if (j == 2 && state[i][j] != 0) {
+                    if (j == n-2 && state[i][j] != 0) {
                         int winner;
                         return winner = state[i][j];
-
                     }
-                    continue;
                 } else {
-                    break innerLoop;
+                    break;
                 }
             }
         }
         // columns
-        for (int i = 0; i < n; i++) {
-            innerLoop:
-            for (int j = 0; j < n - 1; j++) {
-                if (state[j][i] == state[j + 1][i]) {
-                    if (j == 2 && state[j][i] != 0) {
+        for (int j = 0; j < n; j++) {
+            for (int i = 0; i < n-1; i++) {
+                if (state[i][j] == state[i + 1][j]) {
+                    if (i == n-2 && state[i][j] != 0) {
                         int winner;
                         return winner = state[i][j];
-
                     }
-                    continue;
                 } else {
-                    break innerLoop;
+                    break;
                 }
             }
         }
         //diagonals
-        columnLoop:
-        for (int i = 0; i < n - 1; i++) {
+        for (int i = 0; i < n-1; i++) {
             if (state[i][i] == state[i+1][i+1]) {
-                if (i == 2 && state[i][i] != 0) {
+                if (i == n-2 && state[i][i] != 0) {
                     int winner;
                     return winner = state[i][i];
                 }
-                continue;
             } else {
-                break columnLoop;
+                break;
+            }
+        }
+        int k=n-1;
+        for (int i = 0; i < n-1; i++) {
+            if (state[i][i+k] == state[i+1][i+k-1]) {
+                if (i == n-2 && state[i][i+k] != 0) {
+                    int winner;
+                    return winner = state[i][i+k];
+                }
+                k-=2;
+            } else {
+                break;
             }
         }
         // no winner found
@@ -83,30 +86,31 @@ public class TTTnDim {
         File myTTT = new File(FILEPATH);
         Scanner scanner1;
         try {
-            scanner1 = new Scanner(myTTT); //inny scanner
+            scanner1 = new Scanner(myTTT);
         } catch (FileNotFoundException e){
             System.out.println("File not found in " +FILEPATH);
             return;
         }
 
-        int i=0;
-        while (scanner1.hasNext()){ //niż ten
-            i++;
-            System.out.println(i);
+        int countLines=0;
+        while (scanner1.hasNext()){
+            scanner1.nextLine();
+            countLines++;
         }
-        int n = i;
+        int n = countLines;
 
         String[] lines = new String[n];
 
- /*       Scanner scanner2;
+        Scanner scanner2;
         try {
             scanner2 = new Scanner(myTTT);
         } catch (FileNotFoundException e){
             System.out.println("File not found in " +FILEPATH);
-        }*/
-        i=0;
-        while (scanner1.hasNext() && i < n){
-            String line = scanner1.nextLine();
+            return;
+        }
+        int i=0;
+        while (scanner2.hasNext() && i < n){
+            String line = scanner2.nextLine();
             lines[i]=line;
             i++;
         }
@@ -116,12 +120,11 @@ public class TTTnDim {
             state = readTable(lines, n);
         }
         catch(NumberFormatException e){
-            System.out.println("Plik zawiera nielegalny znak");
+            System.out.println("Illegal character in the document");
             return;
         }
 
         int winner;
-//        winner = gameWinner(state);
 
         try {
             winner = gameWinner(state,n);
@@ -141,9 +144,6 @@ public class TTTnDim {
                 break;
             default:
                 System.out.println("Internal error. Game status: " + winner);
-
         }
-
-
     }
 }
