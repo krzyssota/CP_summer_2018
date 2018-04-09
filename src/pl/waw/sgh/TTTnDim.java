@@ -83,14 +83,14 @@ public class TTTnDim {
         File myTTT = new File(FILEPATH);
         Scanner scanner;
         try {
-            scanner = new Scanner(myTTT);
+            scanner = new Scanner(myTTT); //inny scanner
         } catch (FileNotFoundException e){
             System.out.println("File not found in " +FILEPATH);
             return;
         }
 
         int i=0;
-        while (scanner.hasNext()){
+        while (scanner.hasNext()){ //niż ten
             i++;
             System.out.println(i);
         }
