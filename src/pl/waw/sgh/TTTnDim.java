@@ -81,16 +81,16 @@ public class TTTnDim {
     public static void main(String[] args) {
 
         File myTTT = new File(FILEPATH);
-        Scanner scanner;
+        Scanner scanner1;
         try {
-            scanner = new Scanner(myTTT); //inny scanner
+            scanner1 = new Scanner(myTTT); //inny scanner
         } catch (FileNotFoundException e){
             System.out.println("File not found in " +FILEPATH);
             return;
         }
 
         int i=0;
-        while (scanner.hasNext()){ //niż ten
+        while (scanner1.hasNext()){ //niż ten
             i++;
             System.out.println(i);
         }
@@ -98,9 +98,15 @@ public class TTTnDim {
 
         String[] lines = new String[n];
 
+ /*       Scanner scanner2;
+        try {
+            scanner2 = new Scanner(myTTT);
+        } catch (FileNotFoundException e){
+            System.out.println("File not found in " +FILEPATH);
+        }*/
         i=0;
-        while (scanner.hasNext() && i < n){
-            String line = scanner.nextLine();
+        while (scanner1.hasNext() && i < n){
+            String line = scanner1.nextLine();
             lines[i]=line;
             i++;
         }
