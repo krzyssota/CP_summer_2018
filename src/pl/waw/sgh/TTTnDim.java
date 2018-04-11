@@ -29,7 +29,6 @@ public class TTTnDim {
     public static int gameWinner (int[][] state, int n) {
         //rows
         for (int i = 0; i < n; i++) {
-            //innerLoop:
             for (int j = 0; j < n-1; j++) {
                 if (state[i][j] == state[i][j + 1]) {
                     if (j == n-2 && state[i][j] != 0) {
@@ -78,7 +77,7 @@ public class TTTnDim {
             }
         }
         // no winner found
-        throw new RuntimeException();
+        throw new RuntimeException("No winner found.");
     }
 
     public static void main(String[] args) {
