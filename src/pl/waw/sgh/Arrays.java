@@ -14,7 +14,7 @@ public class Arrays {
             System.out.println("element at i " + i + " = " + iArr[i]);
         }
         System.out.println();
-        // for each
+        // for each ple ple
         for (Integer el : iArr) {
             System.out.println("El: " + el);
         }
