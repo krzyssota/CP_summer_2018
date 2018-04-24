@@ -31,8 +31,8 @@ public abstract class AbstractTriangles {
 
     public abstract double calcSurface();
 
-    @Override
+    /*@Override
     public String toString() {
-        return this.getClass().getSimpleName() + " [parA=" + parA + ", parB=" + parB +"parC="+parC+"]";
-    }
+        return this.getClass().getSimpleName() + " [parA=" + parA + ", parB=" + parB +", parC="+parC+"]";
+    }*/
 }

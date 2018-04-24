@@ -10,8 +10,12 @@ public class IsoscelesTriangle extends AbstractTriangles {
         double p = (2*parA+parB)/2;
         return Math.sqrt(p*(p-parA)*(p-parA)*(p-parB));
     }
+//    @Override
+//    public String toString() {
+//        return "My " + super.toString();
+//    }
     @Override
     public String toString() {
-        return "My " + super.toString();
+        return "My "+ this.getClass().getSimpleName() + " [parA=" + parA + ", parB=" + parB+"]";
     }
 }

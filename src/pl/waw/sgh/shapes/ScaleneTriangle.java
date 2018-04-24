@@ -10,8 +10,12 @@ public class ScaleneTriangle extends AbstractTriangles {
         double p = (parA+parB+parC)/2;
         return Math.sqrt(p*(p-parA)*(p-parB)*(p-parC));
     }
-    @Override
+    /*@Override
     public String toString() {
         return "My " + super.toString();
+    }*/
+    @Override
+    public String toString() {
+        return "My " + this.getClass().getSimpleName() + " [parA=" + parA + ", parB=" + parB +", parC="+parC+"]";
     }
 }
