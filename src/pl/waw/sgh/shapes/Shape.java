@@ -1,6 +1,6 @@
 package pl.waw.sgh.shapes;
 
-public abstract class Shape implements ShapeCalculation, Comparable<Shape>  {
+public abstract class Shape implements ShapeCalculation  {
     protected Double parA = 0d;
     protected Double parB = 0d;
 
@@ -25,9 +25,7 @@ public abstract class Shape implements ShapeCalculation, Comparable<Shape>  {
     public String toString() {
         return this.getClass().getSimpleName() + " [parA=" + parA + ", parB=" + parB + "]";
     }
-
-    @Override
-    public int compareTo(Shape s) {
+    public int compareTo(ShapeCalculation s) {
         Double mySurface = Double.valueOf(this.calcSurface());
         Double otherSurface = Double.valueOf(s.calcSurface());
         return mySurface.compareTo(otherSurface);
