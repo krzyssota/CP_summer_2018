@@ -6,8 +6,8 @@ public class PlayWithTriangles {
 
         AbstractTriangles[] myTriangles = new AbstractTriangles[3];
         myTriangles[0] = new ScaleneTriangle(3, 4, 5);
-        myTriangles[1] = new IsoscelesTriangle(3, 4);
-        myTriangles[2] = new EquilateralTriangle(3);
+        myTriangles[1] = new IsoscelesTriangle(3, 4, 4);
+        myTriangles[2] = new EquilateralTriangle(3, 3, 3);
 
         for (AbstractTriangles t : myTriangles) {
             System.out.println(t.toString());

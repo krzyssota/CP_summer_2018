@@ -13,8 +13,12 @@ public abstract class AbstractTriangles {
         parB = b;
         parC = c;
     }
+    public double calcSurface() {
+        double p = (2*parA+parB)/2;
+        return Math.sqrt(p*(p-parA)*(p-parB)*(p-parC));
+    }
 
-    public AbstractTriangles (double a, double b) { //constructor for Isosceles Triangle
+    /*public AbstractTriangles (double a, double b) { //constructor for Isosceles Triangle
         set2Params(a, b);
     }
     public void set2Params(double a, double b) {
@@ -27,9 +31,21 @@ public abstract class AbstractTriangles {
     }
     public void set1Params(double a) {
         parA = a;
-    }
+    }*/                                         //second version, with three contructors
 
-    public abstract double calcSurface();
+
+
+
+
+
+    //public abstract double calcSurface();
+
+
+
+
+
+
+
 
     /*@Override
     public String toString() {
