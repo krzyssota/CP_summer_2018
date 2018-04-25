@@ -1,6 +1,6 @@
 package pl.waw.sgh.shapes;
 
-public class Rectangle extends Shape {
+public class Rectangle extends Shape{
 
     public Rectangle() {
         // call superclass (Shape) constructor
@@ -19,6 +19,11 @@ public class Rectangle extends Shape {
     @Override
     public String toString() {
         return "My " + super.toString();
+    }
+
+    @Override
+    public double calcPerimeter(){
+        return 2*parA+2*parB;
     }
 
 }

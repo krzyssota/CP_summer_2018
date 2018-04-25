@@ -3,7 +3,7 @@ package pl.waw.sgh;
 import java.io.*;
 
 
-public class countFiles {
+public class CountFiles {
 
   static File file = new File("H:\\CompProg\\src\\pl\\waw\\sgh");
 

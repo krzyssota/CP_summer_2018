@@ -31,6 +31,10 @@ public class PlayWithShapes {
             // Avoid using instanceof and casting
             //if (s instanceof Rectangle)
             //    System.out.println("Surface: " + ((Rectangle)s).calcSurface() );
+            if (s instanceof PerimeterCalculation){
+                System.out.println("Perimeter: "+
+                        +((PerimeterCalculation) s).calcPerimeter());
+            }
             System.out.println("Surface: " + s.calcSurface());
         }
 
