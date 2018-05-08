@@ -2,8 +2,10 @@ package pl.waw.sgh;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 
@@ -14,51 +16,47 @@ public class StockReadings {
 
         Scanner scanner;
 
-        for (File file:listOfFiles) {
+        for (File file : listOfFiles) {
             if (file.isFile()) {
                 System.out.println("File " + file.getName());
                 try {
                     scanner = new Scanner(file);
-                } catch (FileNotFoundException e){
+                } catch (FileNotFoundException e) {
                     System.out.println("File not found in " + folder); //never printing out
                     return;
                 }
 
+                ArrayList<Double> open = new ArrayList();
+                ArrayList<Double> close = new ArrayList();
+                ArrayList<Double> change = new ArrayList();
 
+                scanner.nextLine(); //omit first row - coolumn names
 
-            } else if (file.isDirectory()) {
-                System.out.println("Directory " + file.getName());
+                while (scanner.hasNext()) {
+
+                    String line = scanner.nextLine();
+                    String[] lineSplitted = line.split(",");
+                    /*System.out.println("Current line: "+line);*/
+
+                    Double openD = Double.parseDouble(lineSplitted[1]);
+                    Double closeD = Double.parseDouble(lineSplitted[4]);
+
+                    open.add(openD);
+                    close.add(closeD);
+
+                    Double changeD = ((closeD - openD) / openD) * 100;
+                    change.add(changeD);
+
+                }
+
+             /*   DecimalFormat twoDecimalPlaces = new DecimalFormat("#.00");*/
+                for (int i = 0; i < open.size(); i++){
+                    System.out.println(open.get(i) + "\t" + close.get(i) + "\t" + String.format(Locale.US, "%.4f", change.get(i)) + "%");
+//                    System.out.println(open.get(i) + "\t" + close.get(i) + "\t" + twoDecimalPlaces.format(change.get(i)) + "%");
+                }
+
             }
         }
-
-       /* for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                System.out.println("File " + listOfFiles[i].getName());
-            } else if (listOfFiles[i].isDirectory()) {
-                System.out.println("Directory " + listOfFiles[i].getName());
-            }
-        }*/
-
-
-
-        int i=0;
-        ArrayList<Integer> open = new ArrayList();
-        ArrayList<Integer> close = new ArrayList();
-        ArrayList<Integer> change = new ArrayList();
-
-        while (scanner.hasNext()){
-            String line = scanner.nextLine();
-            String[] lineSplitted = line.split(",");
-            Integer openInt = Integer.parseInt(lineSplitted[1]);
-            Integer closeInt = Integer.parseInt(lineSplitted[4]);
-            open.add(openInt);
-            close.add(closeInt);
-            int changeInt = (closeInt-openInt)/openInt;
-            change.add(changeInt);
-            i++;
-        }
-        System.out.println(open);
-
     }
 }
 //2. Write a program that searches for CSV files with stock rates in a given folder and for every one of them:
@@ -67,78 +65,3 @@ public class StockReadings {
 //You can replace the old file or create a new one.
 //
 //Change = (Close-Open)/Open
-
-
-
-
-
-//17:18
-//package pl.waw.sgh;
-//import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.lang.reflect.Array;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Scanner;
-//
-//
-//public class StockReadings {
-//    public static void main(String[] args) {
-//        File folder = new File("C:\\Users\\Krzysztof\\Documents\\computer_programming\\homework5");
-//        File[] listOfFiles = folder.listFiles();
-//
-//        Scanner scanner;
-//
-//        for (File file:listOfFiles) {
-//            if (file.isFile()) {
-//                System.out.println("File " + file.getName());
-//                try {
-//                    scanner = new Scanner(file);
-//                } catch (FileNotFoundException e){
-//                    System.out.println("File not found in " + folder); //never printing out
-//                    return;
-//                }
-//
-//
-//
-//            } else if (file.isDirectory()) {
-//                System.out.println("Directory " + file.getName());
-//            }
-//        }
-//
-//       /* for (int i = 0; i < listOfFiles.length; i++) {
-//            if (listOfFiles[i].isFile()) {
-//                System.out.println("File " + listOfFiles[i].getName());
-//            } else if (listOfFiles[i].isDirectory()) {
-//                System.out.println("Directory " + listOfFiles[i].getName());
-//            }
-//        }*/
-//
-//
-//
-//        int i=0;
-//        ArrayList<Integer> open = new ArrayList();
-//        ArrayList<Integer> close = new ArrayList();
-//        ArrayList<Integer> change = new ArrayList();
-//
-//        while (scanner.hasNext()){
-//            String line = scanner.nextLine();
-//            String[] lineSplitted = line.split(",");
-//            Integer openInt = Integer.parseInt(lineSplitted[1]);
-//            Integer closeInt = Integer.parseInt(lineSplitted[4]);
-//            open.add(openInt);
-//            close.add(closeInt);
-//            int changeInt = (closeInt-openInt)/openInt;
-//            change.add(changeInt);
-//            i++;
-//        }
-//        System.out.println(open);
-//
-//    }
-//}
-////2. Write a program that searches for CSV files with stock rates in a given folder and for every one of them:
-////
-////3. Calculates the percentage change betweeen Close and Open price and adds these values as another column to this CSV file.
-////You can replace the old file or create a new one.
-////
-////Change = (Close-Open)/Open
