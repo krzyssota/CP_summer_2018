@@ -1,9 +1,5 @@
 package pl.waw.sgh;
 import java.io.*;
-import java.lang.reflect.Array;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -24,7 +20,7 @@ public class StockReadings {
             }
         }
     }
-    public static void copyAndImproveFile (File file) throws FileNotFoundException { //plikuj nie interesuje przypadek gdy pliku nie ma
+    public static void copyAndImproveFile (File file) throws FileNotFoundException { //funkcji nie interesuje przypadek gdy pliku nie ma
 
         Scanner scanner = new Scanner(file);
 
