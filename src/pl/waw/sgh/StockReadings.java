@@ -30,7 +30,7 @@ public class StockReadings {
             FileWriter fw = new FileWriter(outfile);
             BufferedWriter out = new BufferedWriter(fw);
 
-            out.write(scanner.nextLine()+",Percentage Change"); //omit first row - coolumn names
+            out.write(scanner.nextLine()+",Percentage Change"); //omit first row - column names
             out.newLine();
             while (scanner.hasNext()) {
 
