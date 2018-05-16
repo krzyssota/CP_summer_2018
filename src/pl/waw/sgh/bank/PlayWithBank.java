@@ -2,6 +2,7 @@ package pl.waw.sgh.bank;
 
 import pl.waw.sgh.bank.exceptions.InvalidAmountException;
 import pl.waw.sgh.bank.exceptions.NonExistantAccountException;
+import pl.waw.sgh.bank.exceptions.BankException;
 
 public class PlayWithBank {
 
@@ -18,9 +19,9 @@ public class PlayWithBank {
         acc1.deposit(100);
 
         try {
-            bank.transfer(5, 1, -100);
+            bank.transfer(0, 1, 110);
             System.out.println(bank);
-        } catch (InvalidAmountException | NonExistantAccountException e) {
+        } catch (/*InvalidAmountException | NonExistantAccountException*/ BankException e) {
             System.out.println(e.getMessage());
         }
        /* catch (InvalidAmountException e){
@@ -28,10 +29,9 @@ public class PlayWithBank {
         } catch (NonExistantAccountException e){
             System.out.println(e.getMessage());
         }*/
-//Add code that will handle exceptions for cases:
-//1. Negative amount passed to charge/deposit/transfer
-//2. Account used in transfer does not exist
-
 
     }
 }
+//Add code that will handle exceptions for cases:
+//1. Negative amount passed to charge/deposit/transfer
+//2. Account used in transfer does not exist
