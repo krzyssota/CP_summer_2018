@@ -16,10 +16,12 @@ public class PlayWithBank {
         Account acc3 = bank.createAccount(c2, false);
         Account acc4 = bank.createAccount(c2, true);
 
+        bank.findAccountsByCustId(0);
+
         acc1.deposit(100);
 
         try {
-            bank.transfer(0, 1, 110);
+            bank.transfer(0, 1, 90);
             System.out.println(bank);
         } catch (/*InvalidAmountException | NonExistantAccountException*/ BankException e) {
             System.out.println(e.getMessage());
