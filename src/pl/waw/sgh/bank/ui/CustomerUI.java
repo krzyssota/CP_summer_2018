@@ -3,11 +3,14 @@ package pl.waw.sgh.bank.ui;
 import pl.waw.sgh.bank.Account;
 import pl.waw.sgh.bank.Bank;
 import pl.waw.sgh.bank.Customer;
+import pl.waw.sgh.bank.exceptions.NonExistantAccountException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class CustomerUI {
     private JTextField idTextField;
@@ -20,24 +23,23 @@ public class CustomerUI {
     private JButton newButton;
     private JButton nextButton;
     private JPanel customerMainPanel;
-    private JPanel CustomerDataPanel;
+    private JTable accTable;
+
+    private AccountsTableModel accountsTableModel;
 
     private Bank bank = new Bank();
-    Customer c1 = bank.createCustomer("Anne", "Brown", "anne@brown.com");
-    Customer c2 = bank.createCustomer("John", "Smith", "john@smith.com");
 
-    Account acc1 = bank.createAccount(c1, false);
-    Account acc2 = bank.createAccount(c1, true);
-    Account acc3 = bank.createAccount(c2, false);
-    Account acc4 = bank.createAccount(c2, true);
+    private JPopupMenu contextMenu = new JPopupMenu("Operations on Account");
+
+    private Customer curCust;
 
     public CustomerUI() {
         $$$setupUI$$$();
-        newButton.addActionListener(new ActionListener() {
+        newButton.addActionListener(new ActionListener() {              //this newbutton clears fields and sets a new id
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Customer newCust = bank.createCustomer("", "", "");       //not sure why do we need a new button. create
-                idTextField.setText(newCust.getCustomerID().toString()); //customer method automatically creates a unique ID
+                curCust = bank.createCustomer("", "", "");
+                displayCustomer(curCust.getCustomerID());
             }
         });
         saveButton.addActionListener(new ActionListener() {
@@ -46,39 +48,85 @@ public class CustomerUI {
                 String fn = firstNameTextField.getText();
                 String ln = lastNameTextField.getText();
                 String em = emailTextField.getText();
-                bank.createCustomer(fn, ln, em);
-                JOptionPane.showMessageDialog(null, bank);
+                if (!fn.equals("") & !ln.equals("") & !em.equals("")) {
+                    curCust.setFirstName(fn);
+                    curCust.setLastName(ln);
+                    curCust.setEmail(em);
+                    //curCust = bank.createCustomer(fn, ln, em);
+                    JOptionPane.showMessageDialog(null, bank);
+                }
+                if (fn.equals("") & ln.equals("") & em.equals("")) {
+                    JOptionPane.showMessageDialog(customerMainPanel, "Missing data.");
+                }
             }
         });
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Integer custId = Integer.parseInt(idTextField.getText());
+                JOptionPane.showConfirmDialog(customerMainPanel, "Are you sure you want to delete customer: " + bank.findCustomerById(custId) + "?");
                 bank.deleteCustomerAndHisHersAccounts(custId);
+                displayCustomer(bank.getCustList().get(0).getCustomerID());
             }
         });
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Integer custId = Integer.parseInt(idTextField.getText());
-                JOptionPane.showMessageDialog(customerMainPanel, bank.findCustomerById(custId + 1));
+                if (!idTextField.getText().equals("")) {
+                    Integer custId = Integer.parseInt(idTextField.getText());
+                    Customer cust = bank.findCustomerById(custId);
+                    int tempId = bank.getCustList().indexOf(cust);
+                    if (tempId < bank.getCustList().size() - 1) {
+                        tempId++;
+                    } else {
+                        tempId = 0;
+                    }
+                    displayCustomer(bank.getCustList().get(tempId).getCustomerID());
+                } else {
+                    JOptionPane.showMessageDialog(customerMainPanel, bank.getCustList().get(0));
+                    idTextField.setText("1");
+                }
             }
         });
         prevButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Integer custId = Integer.parseInt(idTextField.getText());
-                JOptionPane.showMessageDialog(customerMainPanel, bank.findCustomerById(custId - 1)); //improve, for id=0 shows empty messege
+                Customer tempCust = (bank.getCustList().get(bank.getCustList().size() - 1));
+                if (!idTextField.getText().equals("")) {
+                    Integer custId = Integer.parseInt(idTextField.getText());
+                    Customer cust = bank.findCustomerById(custId);
+                    int tempId = bank.getCustList().indexOf(cust);
+                    if (tempId != 0) {
+                        tempId--;
+                    } else {
+                        tempId = 0;
+                    }
+                    displayCustomer(bank.getCustList().get(tempId).getCustomerID());
+                    //JOptionPane.showMessageDialog(customerMainPanel, bank.findCustomerById(tempId));
+                    //idTextField.setText(Integer.toString(tempId));
+                } else {
+                    JOptionPane.showMessageDialog(customerMainPanel, bank.getCustList().get(tempCust.getCustomerID()));
+                    idTextField.setText(Integer.toString(tempCust.getCustomerID()));
+                }
             }
         });
-    }
- /*       Please implement the functionality of buttons in the CustomerUI form:
-        1. Save Button - the data should be read from the textfields and saved to the curCust
-        2. Delete Button
-        3. Prev Button - navigate to the previous Customer in the Customer List of the bank
-        4. Next Button - navigate to the next Customer in the Customer List of the bank
-*/
 
+        // deleteButton.addActionListener();
+        // prevButton
+        // nextButton
+    }
+
+    public void displayCustomer(Integer custId) {
+        curCust = bank.findCustomerById(custId);
+        //JOptionPane.showMessageDialog(customerMainPanel, bank.findCustomerById(tempId));
+        idTextField.setText(Integer.toString(custId));
+        firstNameTextField.setText(curCust.getFirstName());
+        lastNameTextField.setText(curCust.getLastName());
+        emailTextField.setText(curCust.getEmail());
+        // Clear the table and then load exiting accounts
+        accountsTableModel.removeAllRows();
+        accountsTableModel.addRows(bank.findAccountsByCustId(curCust.getCustomerID()));
+    }
 
     public static void main(String[] args) {
         JFrame customerFrame = new JFrame("Bank");
@@ -91,6 +139,47 @@ public class CustomerUI {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+        accountsTableModel = new AccountsTableModel(bank.getAccList());
+        accTable = new JTable(accountsTableModel);
+
+        JMenuItem newDebitAccount = new JMenuItem("New Debit Account");
+        newDebitAccount.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Account newAccount = bank.createAccount(curCust, false);
+                accountsTableModel.addRow(newAccount);
+            }
+        });
+        JMenuItem newSavingsAccount = new JMenuItem("New Savings Account");
+        newSavingsAccount.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Account newAccount = bank.createAccount(curCust, true);
+                accountsTableModel.addRow(newAccount);
+            }
+        });
+
+        JMenuItem deleteAccount = new JMenuItem("Delete Account");
+        /*deleteAccount.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int[] accRowsToDel = accTable.getSelectedRows();
+                for (int selInd : accRowsToDel) {
+                    Account accToDel = accountsTableModel.getAccountByRow(selInd);
+                    try {
+                        bank.deleteAccounts(accToDel.getAccountID());
+                    } catch (NonExistantAccountException) {
+                        JOptionPane.showMessageDialog(null, "Account to be deleted not found: " + selInd);
+                    }
+                }
+                accountsTableModel.removeAllRows();
+                accountsTableModel.addRows(bank.findAccountsByCustId(curCust.getCustomerID()));
+            }
+        });*/
+        contextMenu.add(newDebitAccount);
+        contextMenu.add(newSavingsAccount);
+        contextMenu.add(deleteAccount);
+        accTable.addMouseListener(new AccountsTableMouseListener());
 
     }
 
@@ -102,52 +191,55 @@ public class CustomerUI {
      * @noinspection ALL
      */
     private void $$$setupUI$$$() {
+        createUIComponents();
         customerMainPanel = new JPanel();
-        customerMainPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
-        CustomerDataPanel = new JPanel();
-        CustomerDataPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
-        customerMainPanel.add(CustomerDataPanel, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        customerMainPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
+        customerMainPanel.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         label1.setText("ID");
-        CustomerDataPanel.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         idTextField = new JTextField();
-        CustomerDataPanel.add(idTextField, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(353, 24), null, 0, false));
+        idTextField.setEnabled(false);
+        panel1.add(idTextField, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(353, 24), null, 0, false));
         final JLabel label2 = new JLabel();
         label2.setText("First Name");
-        CustomerDataPanel.add(label2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(label2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         firstNameTextField = new JTextField();
-        CustomerDataPanel.add(firstNameTextField, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(353, 24), null, 0, false));
+        panel1.add(firstNameTextField, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(353, 24), null, 0, false));
         final JLabel label3 = new JLabel();
         label3.setText("Last Name");
-        CustomerDataPanel.add(label3, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(label3, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         lastNameTextField = new JTextField();
-        CustomerDataPanel.add(lastNameTextField, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(353, 24), null, 0, false));
+        panel1.add(lastNameTextField, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(353, 24), null, 0, false));
         final JLabel label4 = new JLabel();
         label4.setText("Email");
-        CustomerDataPanel.add(label4, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(label4, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         emailTextField = new JTextField();
-        CustomerDataPanel.add(emailTextField, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        panel1.add(emailTextField, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
         customerMainPanel.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final JPanel panel1 = new JPanel();
-        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 5, new Insets(0, 0, 0, 0), -1, -1));
-        customerMainPanel.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 5, new Insets(0, 0, 0, 0), -1, -1));
+        customerMainPanel.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         prevButton = new JButton();
         prevButton.setText("<");
-        panel1.add(prevButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(prevButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         saveButton = new JButton();
         saveButton.setText("Save");
-        panel1.add(saveButton, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(saveButton, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         newButton = new JButton();
         newButton.setText("New");
         newButton.setToolTipText("Add New Customer");
-        panel1.add(newButton, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(newButton, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         nextButton = new JButton();
         nextButton.setText(">");
-        panel1.add(nextButton, new com.intellij.uiDesigner.core.GridConstraints(0, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(nextButton, new com.intellij.uiDesigner.core.GridConstraints(0, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         deleteButton = new JButton();
         deleteButton.setText("Delete");
-        panel1.add(deleteButton, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(deleteButton, new com.intellij.uiDesigner.core.GridConstraints(0, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        customerMainPanel.add(accTable, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
     }
 
     /**
@@ -156,4 +248,50 @@ public class CustomerUI {
     public JComponent $$$getRootComponent$$$() {
         return customerMainPanel;
     }
+
+/*
+*
+        *
+    @noinspection
+    ALL
+*/
+
+
+    private class AccountsTableMouseListener implements MouseListener {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            // Is this a right click
+            if (e.isPopupTrigger()) {
+                // Show Context Menu
+                contextMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            // Is this a right click
+            if (e.isPopupTrigger()) {
+                // Show Context Menu
+                contextMenu.show(e.getComponent(), e.getX(), e.getY());
+            }
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+
+
 }

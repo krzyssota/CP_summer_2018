@@ -8,6 +8,10 @@ public abstract class Account {
 
     private Integer accountID;
 
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     private BigDecimal balance;
 
     private Customer customer;

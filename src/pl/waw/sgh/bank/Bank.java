@@ -10,13 +10,24 @@ import java.util.List;
 
 public class Bank {
 
+
+
     List<Customer> custList = new ArrayList<>();
 
     List<Account> accList = new ArrayList<>();
 
+    public Integer getLastCustID() {
+        return lastCustID;
+    }
+
     private Integer lastCustID = 0;
 
+
     private Integer lastAccID = 0;
+
+    public List<Account> getAccList() {
+        return accList;
+    }
 
     public Customer createCustomer(String firstName,
                                    String lastName,
@@ -90,7 +101,16 @@ public class Bank {
                 "Chosen account does not exist.");
     }
 
+    public List<Customer> getCustList() {
+        return custList;
+    }
+    public Integer getLastAccID() {
+        return lastAccID;
+    }
 
+    public void setLastAccID(Integer lastAccID) {
+        this.lastAccID = lastAccID;
+    }
 
     @Override
     public String toString() {
