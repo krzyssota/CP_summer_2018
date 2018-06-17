@@ -2,32 +2,18 @@ package pl.waw.sgh.bank;
 
 import pl.waw.sgh.bank.exceptions.InvalidAmountException;
 import pl.waw.sgh.bank.exceptions.NonExistantAccountException;
-
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
 
-
-
     List<Customer> custList = new ArrayList<>();
-
     List<Account> accList = new ArrayList<>();
-
-    public Integer getLastCustID() {
-        return lastCustID;
-    }
-
     private Integer lastCustID = 0;
-
-
     private Integer lastAccID = 0;
 
-    public List<Account> getAccList() {
-        return accList;
-    }
+
 
     public Customer createCustomer(String firstName,
                                    String lastName,
@@ -104,8 +90,14 @@ public class Bank {
     public List<Customer> getCustList() {
         return custList;
     }
+    public List<Account> getAccList() {
+        return accList;
+    }
     public Integer getLastAccID() {
         return lastAccID;
+    }
+    public Integer getLastCustID() {
+        return lastCustID;
     }
 
     public void setLastAccID(Integer lastAccID) {

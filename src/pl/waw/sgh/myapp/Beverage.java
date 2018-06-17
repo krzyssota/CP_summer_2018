@@ -11,7 +11,7 @@ public abstract class Beverage {
     private User user;
     private int score;
 
-    public Beverage(int beverageID, double dose, double waterUsed, int temperature, String time, String type, User user, int score) {
+    public Beverage(int beverageID, User user, double dose, double waterUsed, int temperature, String time, String type, int score) {
         this.beverageID = beverageID;
         this.dose = dose;
         this.waterUsed = waterUsed;
@@ -21,7 +21,69 @@ public abstract class Beverage {
         this.user = user;
         this.score = score;
     }
-    //getter setter toString
+
+    @Override
+    public String toString() {
+        return "Beverage{" +
+                "beverageID=" + beverageID +
+                ", dose=" + dose +
+                ", waterUsed=" + waterUsed +
+                ", temperature=" + temperature +
+                ", time='" + time + '\'' +
+                ", type='" + type + '\'' +
+                ", user=" + user +
+                ", score=" + score +
+                '}';
+    }
+
+    public int getBeverageID() {
+        return beverageID;
+    }
+    public void setBeverageID(int beverageID) {
+        this.beverageID = beverageID;
+    }
+    public double getDose() {
+        return dose;
+    }
+    public void setDose(double dose) {
+        this.dose = dose;
+    }
+    public double getWaterUsed() {
+        return waterUsed;
+    }
+    public void setWaterUsed(double waterUsed) {
+        this.waterUsed = waterUsed;
+    }
+    public int getTemperature() {
+        return temperature;
+    }
+    public void setTemperature(int temperature) {
+        this.temperature = temperature;
+    }
+    public String getTime() {
+        return time;
+    }
+    public void setTime(String time) {
+        this.time = time;
+    }
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public int getScore() {
+        return score;
+    }
+    public void setScore(int score) {
+        this.score = score;
+    }
 }
   //maybe rate each brew and show the best recipe of given coffee, tea?
 

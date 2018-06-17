@@ -3,15 +3,32 @@ package pl.waw.sgh.myapp;
 public class User {
 
     private Integer userID;
-    private String firstName;
-    private String lastName;
+    private String Name;
     private String waterMineralization; //TODO GH/KH in 1 liter  add a format GH/KH
     // water should be a separate class?
 
-    public User (Integer userID, String firstName, String lastName, String waterMineralization) {
+    public User (Integer userID, String Name, String waterMineralization) {
         this.userID = userID;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.Name = Name;
+        this.waterMineralization = waterMineralization;
+    }
+
+    public Integer getUserID() {
+        return userID;
+    }
+    public void setUserID(Integer userID) {
+        this.userID = userID;
+    }
+    public String getName() {
+        return Name;
+    }
+    public void setName(String name) {
+        Name = name;
+    }
+    public String getWaterMineralization() {
+        return waterMineralization;
+    }
+    public void setWaterMineralization(String waterMineralization) {
         this.waterMineralization = waterMineralization;
     }
 }

@@ -4,8 +4,8 @@ public class Tea extends Beverage {
 
     private int noSteeps;
 
-    public Tea(int beverageID, double dose, double waterUsed, int temperature, String time, String type, User user, int score, int noSteeps) {
-        super(beverageID, dose, waterUsed, temperature, time, type, user, score);
+    public Tea(int beverageID, User user, double dose, double waterUsed, int temperature, String time, String type, int score, int noSteeps) {
+        super(beverageID, user, dose, waterUsed, temperature, time, type, score);
         this.noSteeps = noSteeps;
     }
 }
