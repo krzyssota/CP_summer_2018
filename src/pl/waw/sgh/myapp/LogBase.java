@@ -1,4 +1,3 @@
-/*
 package pl.waw.sgh.myapp;
 
 import pl.waw.sgh.bank.exceptions.NonExistantAccountException;
@@ -122,4 +121,3 @@ public class LogBase {
     }
 }
 
-*/

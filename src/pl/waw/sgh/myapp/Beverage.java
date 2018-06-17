@@ -21,6 +21,9 @@ public abstract class Beverage {
         this.user = user;
         this.score = score;
     }
+    abstract Integer getGrindLevel();
+    abstract double getTds();
+    abstract int getNoSteeps();
 
     @Override
     public String toString() {
