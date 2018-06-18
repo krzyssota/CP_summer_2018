@@ -13,6 +13,13 @@ public class User {
         this.waterMineralization = waterMineralization;
     }
 
+    @Override
+    public String toString() {
+        return  "ID = " + userID + " " +
+                Name +
+                ", water Mineralization: " + waterMineralization;
+    }
+
     public Integer getUserID() {
         return userID;
     }

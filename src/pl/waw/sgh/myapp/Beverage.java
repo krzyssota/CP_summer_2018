@@ -43,16 +43,15 @@ public abstract class Beverage {
 
     @Override
     public String toString() {
-        return "Beverage{" +
-                "beverageID=" + beverageID +
-                ", dose=" + dose +
-                ", waterUsed=" + waterUsed +
-                ", temperature=" + temperature +
-                ", time='" + time + '\'' +
-                ", type='" + type + '\'' +
-                ", user=" + user +
-                ", score=" + score +
-                '}';
+        return "\nBeverage " +
+                "ID = " + beverageID +
+                ", dose = " + dose +
+                ", water Used = " + waterUsed +
+                ", temperature = " + temperature + ",\n" +
+                "time: " + time +
+                ", type: " + type +
+                ", user: " + user.getName() +
+                ", score = " + score;
     }
 
     public int getBeverageID() {

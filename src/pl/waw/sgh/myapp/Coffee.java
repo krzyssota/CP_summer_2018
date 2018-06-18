@@ -13,15 +13,6 @@ public abstract class Coffee extends Beverage{
         this.ext = ext;
     }
 
-    @Override
-    public String toString() {
-        return "Coffee{" +
-                "grindLevel=" + grindLevel +
-                ", tds=" + tds +
-                ", ext=" + ext +
-                '}';
-    }
-
     public double getExt() {
         return ext;
     }

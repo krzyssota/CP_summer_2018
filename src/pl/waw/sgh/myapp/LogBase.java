@@ -76,23 +76,19 @@ public class LogBase {
         return null;
     }
 
-    public Beverage findBeverageByID (int bevID) throws NonExistantAccountException{
+    /*public Beverage findBeverageByID (int bevID) throws NonExistantAccountException{
         for (Beverage bev : bevsList) {
             if (bevID == bev.getBeverageID())
                 return bev;
         }
         throw new NonExistantBeverageException(  //TODO NEBE
                 "Chosen beverage does not exist.");
-    }
+    }*/
 
     @Override
     public String toString() {
-        return "LogBase{" +
-                "usersList=" + usersList +
-                ", bevsList=" + bevsList +
-                ", lastUserID=" + lastUserID +
-                ", lastBevID=" + lastBevID +
-                '}';
+        return "LogBase " +"\n" + "users: "+ usersList + "\n" +
+                "beverages:" + bevsList;
     }
 
     public List<Beverage> getBevsList() {
