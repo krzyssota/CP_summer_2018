@@ -21,9 +21,25 @@ public abstract class Beverage {
         this.user = user;
         this.score = score;
     }
-    abstract Integer getGrindLevel();
-    abstract double getTds();
-    abstract int getNoSteeps();
+
+    public Integer getGrindLevel(){
+        return Coffee.grindLevel;
+    }
+    public double getTds(){
+        return Coffee.tds;
+    }
+    public int getNoSteeps(){
+        return Tea.noSteeps;
+    }
+    public void setGrindLevel(Integer grindLevel) {
+        Coffee.grindLevel = grindLevel;
+    }
+    public void setTds(double tds) {
+        Coffee.tds = tds;
+    }
+    public void setNoSteeps(int noSteeps) {
+        Tea.noSteeps = noSteeps;
+    }
 
     @Override
     public String toString() {

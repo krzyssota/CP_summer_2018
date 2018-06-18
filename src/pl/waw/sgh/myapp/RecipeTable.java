@@ -109,22 +109,22 @@ public class RecipeTable extends DefaultTableModel {
                     bev.setTemperature((int)newVal);
                     return;
                 case 5:
-                    bev.setDose((Double)newVal);
+                    bev.setTime((String)newVal);
                     return;
                 case 6:
-                    bev.setDose((Double)newVal);
+                    bev.setType((String)newVal); //newVal.toString() ?
                     return;
                 case 7:
-                    bev.setDose((Double)newVal);
+                    bev.setScore((int)newVal);
                     return;
                 case 8:
-                    bev.setDose((Double)newVal);
+                    bev.setGrindLevel((Integer)newVal);
                     return;
                 case 9:
-                    bev.setDose((Double)newVal);
+                    bev.setTds((Double)newVal);
                     return;
                 case 10:
-                    bev.setDose((Double)newVal);
+                    bev.setNoSteeps((int)newVal);
                     return;
             }
         }
