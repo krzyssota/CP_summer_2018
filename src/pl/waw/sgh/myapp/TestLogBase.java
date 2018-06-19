@@ -2,6 +2,9 @@ package pl.waw.sgh.myapp;
 
 import sun.rmi.runtime.Log;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TestLogBase {
     public static void main(String[] args) {
         LogBase logBase = new LogBase();
@@ -15,7 +18,11 @@ public class TestLogBase {
        /* int fet, User user, double dose, double waterUsed, int temperature, String time, String type,
         int score, Integer grindLevel, double tds,  int noSteeps */
         /*System.out.println(logBase);*/
-        System.out.println(logBase.getListOfTypes()+"\n---\n"+
+
+        int n = logBase.countTypes();
+        String[] typesStrings = logBase.getListOfTypes(n);
+
+        System.out.println(n+"\n"+Arrays.toString(typesStrings)+"\n---\n"+
                 logBase.createAListOfBeveragesOfTheSameType("Kenya")+"\n---\n"+
                 logBase.findBestRecipeByType("Kenya")
         );

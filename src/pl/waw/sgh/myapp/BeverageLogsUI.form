@@ -50,12 +50,16 @@
       </component>
       <hspacer id="5493a">
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="4" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="4" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="14" height="35"/>
+          </grid>
         </constraints>
       </hspacer>
       <component id="70f91" class="javax.swing.JButton" binding="showBestRecipeButton" default-binding="true">
         <constraints>
-          <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="3" row-span="1" col-span="1" vsize-policy="4" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="125" height="46"/>
+          </grid>
         </constraints>
         <properties>
           <text value="Show best recipe"/>
@@ -93,9 +97,11 @@
         </constraints>
         <properties/>
       </component>
-      <component id="20b5e" class="javax.swing.JComboBox" binding="typeOfBestBeverage">
+      <component id="20b5e" class="javax.swing.JComboBox" binding="typeOfBestBeverage" custom-create="true">
         <constraints>
-          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="42" height="46"/>
+          </grid>
         </constraints>
         <properties/>
       </component>
@@ -125,7 +131,9 @@
       </component>
       <component id="7178e" class="javax.swing.JLabel">
         <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="91" height="46"/>
+          </grid>
         </constraints>
         <properties>
           <text value="Type of beverage"/>

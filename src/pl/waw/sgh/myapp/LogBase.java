@@ -43,12 +43,33 @@ public class LogBase {
         }
         return null; //TODO handle exeption
     }
-    public List<String> getListOfTypes(){
+   /* public List<String> getListOfTypes(){
         List<String> typesList = new ArrayList();
         typesList.add(bevsList.get(0).getType());
         for (Beverage bev:bevsList){
             if (bevsList.indexOf(bev)!=0 && bev.getType() != bevsList.get(bevsList.indexOf(bev)-1).getType()){
                     typesList.add(bev.getType());
+            }
+        }
+        return typesList;
+    }*/
+   public int countTypes(){
+       int n=1;
+       for (Beverage bev:bevsList){
+           if (bevsList.indexOf(bev)!=0 && bev.getType() != bevsList.get(bevsList.indexOf(bev)-1).getType()){
+               n+=1;
+           }
+       }
+       return n;
+   }
+    public String[] getListOfTypes(int n){
+        String[] typesList = new String[n];
+        typesList[0] = (bevsList.get(0).getType());
+        int index = 1;
+        for (Beverage bev:bevsList){
+            if (bevsList.indexOf(bev)!=0 && bev.getType() != bevsList.get(bevsList.indexOf(bev)-1).getType()){
+                typesList[index] = bev.getType();
+                index++;
             }
         }
         return typesList;
