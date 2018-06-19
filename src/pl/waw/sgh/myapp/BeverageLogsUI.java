@@ -1,10 +1,13 @@
 package pl.waw.sgh.myapp;
 
+import pl.waw.sgh.Strings;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BeverageLogsUI {
 
@@ -92,36 +95,6 @@ public class BeverageLogsUI {
                 // String time, String type, int score, Integer grindLevel, double tds,  int noSteeps
             }
         });
-    }
-
-     public class ComboBox extends JPanel
-            implements ActionListener {
-
-        public ComboBox() {
-            super(new GridLayout());
-
-            String[] typesStrings = logBase.getListOfTypes().toArray(new String[0]);
-            int n = typesStrings.length;
-            JComboBox typesList = new JComboBox(typesStrings);
-            typesList.setSelectedIndex(n);
-            typesList.addActionListener(this);
-        }
-
-        /** Listens to the combo box.*/
-        public void actionPerformed(ActionEvent e) {
-            JComboBox cb = (JComboBox)e.getSource();
-            String typeName = (String)cb.getSelectedItem();
-            listOfBeveragesTextPane.setText(logBase.findBestRecipesByType(typeName).toString());
-        }
-    }
-
-    public static void main(String[] args) {
-        JFrame customerFrame = new JFrame("Log Base");
-        BeverageLogsUI beverageLogsUI = new BeverageLogsUI();
-        customerFrame.add(beverageLogsUI.MainPanel);
-        customerFrame.pack();
-        customerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        customerFrame.setVisible(true);
     }
 
     {
@@ -240,4 +213,40 @@ public class BeverageLogsUI {
     public JComponent $$$getRootComponent$$$() {
         return MainPanel;
     }
+
+
+    public class ComboBox extends JPanel
+            implements ActionListener {
+
+        public ComboBox() {
+            super(new BorderLayout());
+
+            List<String> listOfTypes = logBase.getListOfTypes();
+            String[] typesStrings = listOfTypes.toArray(new String[listOfTypes.size()]);
+            int n = typesStrings.length;
+            JComboBox typesList = new JComboBox(typesStrings);
+            typesList.setSelectedIndex(n);
+            typesList.addActionListener(this);
+        }
+
+        /**
+         * Listens to the combo box.
+         */
+        public void actionPerformed(ActionEvent e) {
+            JComboBox cb = (JComboBox) e.getSource();
+            String typeName = (String) cb.getSelectedItem();
+            listOfBeveragesTextPane.setText(logBase.findBestRecipeByType(typeName).toString());
+        }
+    }
+
+    public static void main(String[] args) {
+        JFrame customerFrame = new JFrame("Log Base");
+        BeverageLogsUI beverageLogsUI = new BeverageLogsUI();
+        customerFrame.add(beverageLogsUI.MainPanel);
+        customerFrame.pack();
+        customerFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        customerFrame.setVisible(true);
+    }
+
+
 }

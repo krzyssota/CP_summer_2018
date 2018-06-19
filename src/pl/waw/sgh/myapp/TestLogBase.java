@@ -14,6 +14,10 @@ public class TestLogBase {
         Beverage bev4 = logBase.createBeverage(2, u2, 6,  600, 70, "180s", "Green", 7,  0,  0,   2 );
        /* int fet, User user, double dose, double waterUsed, int temperature, String time, String type,
         int score, Integer grindLevel, double tds,  int noSteeps */
-        System.out.println(logBase);
+        /*System.out.println(logBase);*/
+        System.out.println(logBase.getListOfTypes()+"\n---\n"+
+                logBase.createAListOfBeveragesOfTheSameType("Kenya")+"\n---\n"+
+                logBase.findBestRecipeByType("Kenya")
+        );
     }
 }

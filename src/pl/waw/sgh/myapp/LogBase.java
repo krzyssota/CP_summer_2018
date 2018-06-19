@@ -47,11 +47,8 @@ public class LogBase {
         List<String> typesList = new ArrayList();
         typesList.add(bevsList.get(0).getType());
         for (Beverage bev:bevsList){
-            if (bevsList.indexOf(bev)==0){
-                continue;
-            }
-            if (bev.getType() != bevsList.get(bevsList.indexOf(bev)-1).getType()){
-                typesList.add(bev.getType());
+            if (bevsList.indexOf(bev)!=0 && bev.getType() != bevsList.get(bevsList.indexOf(bev)-1).getType()){
+                    typesList.add(bev.getType());
             }
         }
         return typesList;
@@ -66,27 +63,15 @@ public class LogBase {
         return listOfBeveragesOfTheSameType;
     }
 
-    public Beverage findBestRecipeByType(String typeName, LogBase logbase){
-        List<Beverage> listOfBeveragesOfTheSameType = logbase.createAListOfBeveragesOfTheSameType(typeName);
+    public Beverage findBestRecipeByType(String typeName){
+        List<Beverage> listOfBeveragesOfTheSameType = createAListOfBeveragesOfTheSameType(typeName);
         Beverage bestRecipe = listOfBeveragesOfTheSameType.get(0);
         for (Beverage bev:listOfBeveragesOfTheSameType){
-            if (listOfBeveragesOfTheSameType.indexOf(bev)==0){
-                continue;
-            }
-            if (bev.getScore() >= bestRecipe.getScore()){
+            if (listOfBeveragesOfTheSameType.indexOf(bev)!=0 && bev.getScore() >= bestRecipe.getScore()){
                 bestRecipe = bev;
             }
         }
         return bestRecipe;
-
-
-        /*    List<Beverage> allBevsWithUserID= new ArrayList<>();
-        for (Beverage bev : bevsList) {
-            if ( userID.equals(bev.getUser().getUserID())) {  //TODO add getter and setter in user
-                allBevsWithUserID.add(bev);
-            }
-        }
-        return allBevsWithUserID;*/
     }
 
     public void deleteUserAndHisHersBeverages (Integer userID) {
