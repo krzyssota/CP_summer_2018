@@ -1,6 +1,7 @@
 package pl.waw.sgh.myapp;
 
 import pl.waw.sgh.bank.exceptions.NonExistantAccountException;
+import sun.rmi.runtime.Log;
 
 import java.nio.file.attribute.UserPrincipalLookupService;
 import java.util.ArrayList;
@@ -41,6 +42,51 @@ public class LogBase {
             return beverage;
         }
         return null; //TODO handle exeption
+    }
+    public List<String> getListOfTypes(){
+        List<String> typesList = new ArrayList();
+        typesList.add(bevsList.get(0).getType());
+        for (Beverage bev:bevsList){
+            if (bevsList.indexOf(bev)==0){
+                continue;
+            }
+            if (bev.getType() != bevsList.get(bevsList.indexOf(bev)-1).getType()){
+                typesList.add(bev.getType());
+            }
+        }
+        return typesList;
+    }
+    public List<Beverage> createAListOfBeveragesOfTheSameType(String typeName){
+        List<Beverage> listOfBeveragesOfTheSameType = new ArrayList<>();
+        for (Beverage bev:bevsList){
+            if (bev.getType().equals(typeName)){
+                listOfBeveragesOfTheSameType.add(bev);
+            }
+        }
+        return listOfBeveragesOfTheSameType;
+    }
+
+    public Beverage findBestRecipeByType(String typeName, LogBase logbase){
+        List<Beverage> listOfBeveragesOfTheSameType = logbase.createAListOfBeveragesOfTheSameType(typeName);
+        Beverage bestRecipe = listOfBeveragesOfTheSameType.get(0);
+        for (Beverage bev:listOfBeveragesOfTheSameType){
+            if (listOfBeveragesOfTheSameType.indexOf(bev)==0){
+                continue;
+            }
+            if (bev.getScore() >= bestRecipe.getScore()){
+                bestRecipe = bev;
+            }
+        }
+        return bestRecipe;
+
+
+        /*    List<Beverage> allBevsWithUserID= new ArrayList<>();
+        for (Beverage bev : bevsList) {
+            if ( userID.equals(bev.getUser().getUserID())) {  //TODO add getter and setter in user
+                allBevsWithUserID.add(bev);
+            }
+        }
+        return allBevsWithUserID;*/
     }
 
     public void deleteUserAndHisHersBeverages (Integer userID) {

@@ -14,7 +14,7 @@ public class Tea extends Beverage {
     }
     @Override
     public String attributesToString() {
-        return super.attributesToString() + ", which steeping: " + noSteeps+"\n";
+        return super.attributesToString() + ", which steeping: " + noSteeps;
     }
 }
 //herbata id 0 rodzaj (biala zielona itp) ratio temperatura czas woda (sklad mineralny)?

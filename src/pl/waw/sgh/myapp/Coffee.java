@@ -15,7 +15,7 @@ public abstract class Coffee extends Beverage{
 
     @Override
     public String attributesToString() {
-        return super.attributesToString() + ", grind level: " + grindLevel + ", TDS = " + tds +"\n";
+        return super.attributesToString() + ", grind level: " + grindLevel + ", TDS = " + tds;
     }
 
 

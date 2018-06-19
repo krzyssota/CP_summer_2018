@@ -34,7 +34,7 @@ public abstract class Beverage {
     }
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" + attributesToString() + ")";
+        return "\n"+getClass().getSimpleName() + "(" + attributesToString() + ")";
 
     }
 
