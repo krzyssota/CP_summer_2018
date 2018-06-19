@@ -1,3 +1,4 @@
+/*
 package pl.waw.sgh.myapp;
 
 import javax.swing.table.DefaultTableModel;
@@ -129,3 +130,4 @@ public class RecipeTable extends DefaultTableModel {
             }
         }
 }
+*/

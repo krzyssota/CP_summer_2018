@@ -19,6 +19,10 @@ public class LogBase {
         usersList.add(user);
         return user;
     }
+    /*public void addBeverage(Beverage bev){
+        bev.setID(lastBevID++);
+        bevsList.add(bev);
+    }*/  //TODO consider changing to dis
 
     public Beverage createBeverage (int fet, User user, double dose, double waterUsed, int temperature, String time, String type, int score, Integer grindLevel, double tds,  int noSteeps ) {
         if (fet==0) {
@@ -28,7 +32,7 @@ public class LogBase {
         }
         if (fet==1) {
             Beverage beverage = new Espresso(lastBevID++, user, dose, waterUsed, temperature, time, type, score, grindLevel, tds, tds*waterUsed/dose);
-            bevsList.add(beverage);
+            bevsList.add(beverage); //TODO does extraction work?
             return beverage;
         }
         if (fet==2) {
@@ -87,8 +91,15 @@ public class LogBase {
 
     @Override
     public String toString() {
-        return "LogBase " +"\n" + "users: "+ usersList + "\n" +
-                "beverages:" + bevsList;
+
+        String res = "LogBase " +"\n" + "users: "+ usersList + "\n" +
+                "beverages: \n";
+        for (Beverage bev:bevsList) {
+            Class originalClass = bev.getClass();
+            res += originalClass.cast(bev).toString() + "\n";
+
+        }
+        return res;
     }
 
     public List<Beverage> getBevsList() {
@@ -102,6 +113,9 @@ public class LogBase {
     }
     public Integer getLastUserID() {
         return lastUserID;
+    }
+    public Integer getNewUserID() {
+        return lastUserID++;
     }
     public void setUsersList(List<User> usersList) {
         this.usersList = usersList;

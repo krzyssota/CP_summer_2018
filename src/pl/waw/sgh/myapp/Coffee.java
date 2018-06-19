@@ -2,8 +2,8 @@ package pl.waw.sgh.myapp;
 
 public abstract class Coffee extends Beverage{
 
-    public static Integer grindLevel;
-    public static double tds;
+    public Integer grindLevel;
+    public double tds;
     private double ext;
 
     public Coffee(int beverageID, User user, double dose, double waterUsed, int temperature, String time, String type, int score, Integer grindLevel, double tds, double ext) {
@@ -12,6 +12,12 @@ public abstract class Coffee extends Beverage{
         this.tds = tds;
         this.ext = ext;
     }
+
+    @Override
+    public String attributesToString() {
+        return super.attributesToString() + ", grind level: " + grindLevel + ", TDS = " + tds +"\n";
+    }
+
 
     public double getExt() {
         return ext;
