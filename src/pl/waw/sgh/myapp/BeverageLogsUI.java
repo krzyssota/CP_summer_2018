@@ -38,7 +38,9 @@ public class BeverageLogsUI {
     private JComboBox fetComboBox;
     private JSpinner userIDSpinner;
 
+    //Database
     LogBase logBase = new LogBase();
+
     User u1 = logBase.createUser("Krzys", "50/50");
     User u2 = logBase.createUser("Janka", "100/70");
     User u3 = logBase.createUser("Julka", "60/70");
@@ -66,17 +68,10 @@ public class BeverageLogsUI {
     Beverage bev15 = logBase.createBeverage(2, u5, 4, 300, 85, "180s", "White", 9, 0, 0, 2);
     Beverage bev16 = logBase.createBeverage(1, u5, 18, 300, 95, "150s", "Panama", 10, 20, 1.2, 1);
 
-
-
-
-
-    private User curUser;
-
-
     public BeverageLogsUI() {
 
         $$$setupUI$$$();
-        showRecipesButton.addActionListener(new ActionListener() {
+        showRecipesButton.addActionListener(new ActionListener() { //show recipes of current user
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 int currentUserID = (Integer) userIDSpinner.getValue();
@@ -84,7 +79,7 @@ public class BeverageLogsUI {
             }
         });
 
-        saveNewUserButton.addActionListener(new ActionListener() {
+        saveNewUserButton.addActionListener(new ActionListener() { //save new user with input name and water
             @Override
             public void actionPerformed(ActionEvent e) {
                 String userName = userNameTextField.getText();
@@ -98,11 +93,11 @@ public class BeverageLogsUI {
             }
         });
 
-        saveRecipeButton.addActionListener(new ActionListener() {
+        saveRecipeButton.addActionListener(new ActionListener() { //save recipe to current user
             @Override
-            public void actionPerformed(ActionEvent e) { //TODO check if user does exist
+            public void actionPerformed(ActionEvent e) {
 
-                String fetString = (String) fetComboBox.getSelectedItem();
+                String fetString = (String) fetComboBox.getSelectedItem(); //translate combobox to argument od create beverage
                 int fetInt = 0;
                 switch (fetString) {
                     case "Filter":
@@ -121,23 +116,34 @@ public class BeverageLogsUI {
                 int currentUserID = (Integer) userIDSpinner.getValue();
                 User currentUser = logBase.findUserByID(currentUserID);
 
-                logBase.createBeverage(
-                        /*Integer.parseInt(fetTextField.getText()),*/
-                        fetInt,
-                        currentUser,
-                        Double.parseDouble(doseTextField.getText()),
-                        Double.parseDouble(waterTextField.getText()),
-                        Integer.parseInt(temperatureTextField.getText()),
-                        timeTextField.getText(),
-                        typeTextField.getText(),
-                        Integer.parseInt(scoreTextField.getText()),
-                        Integer.parseInt(grindLevelTextField.getText()),
-                        Double.parseDouble(tdsTextField.getText()),
-                        Integer.parseInt(whichSteepingTextField.getText())
-                );
-                //createBeverage (int fet, User user, double dose, double waterUsed, int temperature
-                // String time, String type, int score, Integer grindLevel, double tds,  int noSteeps
-                JOptionPane.showMessageDialog(MainPanel, "Recipe\n" + logBase.bevsList.get(logBase.bevsList.size() - 1) + "\nsaved to user:\n" + currentUser);
+                if (!doseTextField.getText().equals("") && !waterTextField.getText().equals("") &&             //nonempty fields
+                        !temperatureTextField.getText().equals("") && !timeTextField.getText().equals("") &&
+                        !typeTextField.getText().equals("") && !scoreTextField.getText().equals("") &&
+                        !grindLevelTextField.getText().equals("") && !tdsTextField.getText().equals("") &&
+                        !whichSteepingTextField.getText().equals("")) {
+
+                    logBase.createBeverage(
+                            /*Integer.parseInt(fetTextField.getText()),*/
+                            fetInt,
+                            currentUser,
+                            Double.parseDouble(doseTextField.getText()),
+                            Double.parseDouble(waterTextField.getText()),
+                            Integer.parseInt(temperatureTextField.getText()),
+                            timeTextField.getText(),
+                            typeTextField.getText(),
+                            Integer.parseInt(scoreTextField.getText()),
+                            Integer.parseInt(grindLevelTextField.getText()),
+                            Double.parseDouble(tdsTextField.getText()),
+                            Integer.parseInt(whichSteepingTextField.getText())
+                    );
+                    //createBeverage (int fet, User user, double dose, double waterUsed, int temperature
+                    // String time, String type, int score, Integer grindLevel, double tds,  int noSteeps
+                    JOptionPane.showMessageDialog(MainPanel, "Recipe\n" + logBase.bevsList.get(logBase.bevsList.size() - 1) + "\nsaved to user:\n" + currentUser);
+                } else {
+                    JOptionPane.showMessageDialog(MainPanel, "Missing data. All text fields should be filled.\n" +
+                            "If you want to save coffee recipe type 0 in which steeping text field.\n" +
+                            "If you want to save tea recipe type 0 in grind level and tds text field.");
+                }
             }
         });
         deleteCurrentUserButton.addActionListener(new ActionListener() {
@@ -155,7 +161,7 @@ public class BeverageLogsUI {
 
     private void createUIComponents() {
 
-        int n = logBase.countTypes();
+        int n = logBase.countTypes();                           //combobox of origins/types of tea
         String[] typesStrings = logBase.getListOfTypes(n);
         typeOfBestBeverage = new JComboBox(typesStrings);
         typeOfBestBeverage.setSelectedIndex(0);
@@ -168,14 +174,14 @@ public class BeverageLogsUI {
             }
         });
 
-        String[] fetStrings = new String[3];
+        String[] fetStrings = new String[3];            // combobox of espresso/filter/tea
         fetStrings[0] = "Filter";
         fetStrings[1] = "Espresso";
         fetStrings[2] = "Tea";
         fetComboBox = new JComboBox(fetStrings);
         fetComboBox.setSelectedIndex(0);
 
-        int noOfID = logBase.usersList.size();
+        int noOfID = logBase.usersList.size();                                            //jspinner with user ids
         SpinnerNumberModel spinnerRange = new SpinnerNumberModel(0, 0, noOfID - 1, 1);
         userIDSpinner = new JSpinner(spinnerRange);
 
@@ -291,6 +297,7 @@ public class BeverageLogsUI {
         label13.setText("Show best recipe of brewing:");
         MainPanel.add(label13, new com.intellij.uiDesigner.core.GridConstraints(4, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(91, 8), null, 0, false));
         MainPanel.add(fetComboBox, new com.intellij.uiDesigner.core.GridConstraints(7, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        userIDSpinner.setEnabled(false);
         MainPanel.add(userIDSpinner, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 

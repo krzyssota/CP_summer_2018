@@ -15,7 +15,7 @@ public class LogBase {
     private Integer lastUserID = 0;
     private Integer lastBevID = 0;
 
-    public User createUser(String Name, String waterMineralization) {
+    public User createUser(String Name, String waterMineralization) { //method create used automatically assigns a new ID
         User user = new User(lastUserID++, Name, waterMineralization);
         usersList.add(user);
         return user;
@@ -25,6 +25,9 @@ public class LogBase {
         bevsList.add(bev);
     }*/  //TODO consider changing to dis
 
+
+    //create beverage automatically assigns a new bevID. It takes all arguments describing potential beverege and creates a particular beverage
+    //fet!=0,1,2 is not possible because of combobox in UI
     public Beverage createBeverage (int fet, User user, double dose, double waterUsed, int temperature, String time, String type, int score, Integer grindLevel, double tds,  int noSteeps ) {
         if (fet==0) {
             Beverage beverage = new Filter(lastBevID++, user, dose, waterUsed, temperature, time, type, score, grindLevel, tds, tds*waterUsed/dose);
@@ -53,6 +56,8 @@ public class LogBase {
         }
         return typesList;
     }*/
+
+   //four methods used to set up a combobox searching for best recipe for particular origin of coffee/tpye of tea
    public int countTypes(){
        int n=1;
        for (Beverage bev:bevsList){
@@ -95,6 +100,7 @@ public class LogBase {
         return bestRecipe;
     }
 
+    //methods used to find and delete users and beverages
     public void deleteUserAndHisHersBeverages (Integer userID) {
         deleteUser(userID);
         deleteBeveragesByUserID(userID);

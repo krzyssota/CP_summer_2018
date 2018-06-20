@@ -1,6 +1,6 @@
 package pl.waw.sgh.myapp;
 
-public class User {
+public class User { //every use has an own water with unique mineral content
 
     private Integer userID;
     private String Name;

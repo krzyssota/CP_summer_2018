@@ -1,6 +1,6 @@
 package pl.waw.sgh.myapp;
 
-public abstract class Coffee extends Beverage{
+public abstract class Coffee extends Beverage{ //abstract class coffee that contains filter and espresso with more properites and modified toString
 
     public Integer grindLevel;
     public double tds;
@@ -15,7 +15,7 @@ public abstract class Coffee extends Beverage{
 
     @Override
     public String attributesToString() {
-        return super.attributesToString() + ", grind level: " + grindLevel + ", TDS = " + tds;
+        return super.attributesToString() + ", grind level: " + grindLevel + ", TDS = " + tds+", ext% = "+ext;
     }
 
 
