@@ -39,6 +39,7 @@ public class BeverageLogsUI {
     private JSpinner userIDSpinner;
 
     //Database
+    //TODO save the database somewhere. csv for example
     LogBase logBase = new LogBase();
 
     User u1 = logBase.createUser("Krzys", "50/50");
@@ -181,8 +182,8 @@ public class BeverageLogsUI {
         fetComboBox = new JComboBox(fetStrings);
         fetComboBox.setSelectedIndex(0);
 
-        int noOfID = logBase.usersList.size();                                            //jspinner with user ids
-        SpinnerNumberModel spinnerRange = new SpinnerNumberModel(0, 0, noOfID - 1, 1);
+        //jspinner with user ids
+        SpinnerNumberModel spinnerRange = new SpinnerNumberModel(0, 0, (int) logBase.getLastUserID(), 1);
         userIDSpinner = new JSpinner(spinnerRange);
 
         userIDSpinner.addChangeListener(new ChangeListener() {
@@ -297,7 +298,7 @@ public class BeverageLogsUI {
         label13.setText("Show best recipe of brewing:");
         MainPanel.add(label13, new com.intellij.uiDesigner.core.GridConstraints(4, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(91, 8), null, 0, false));
         MainPanel.add(fetComboBox, new com.intellij.uiDesigner.core.GridConstraints(7, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        userIDSpinner.setEnabled(false);
+        userIDSpinner.setEnabled(true);
         MainPanel.add(userIDSpinner, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
