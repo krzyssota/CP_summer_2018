@@ -4,8 +4,7 @@ public class User {
 
     private Integer userID;
     private String Name;
-    private String waterMineralization; //TODO GH/KH in 1 liter  add a format GH/KH
-    // water should be a separate class?
+    private String waterMineralization;
 
     public User (Integer userID, String Name, String waterMineralization) {
         this.userID = userID;
@@ -22,9 +21,6 @@ public class User {
 
     public Integer getUserID() {
         return userID;
-    }
-    public void setUserID(Integer userID) {
-        this.userID = userID;
     }
     public String getName() {
         return Name;

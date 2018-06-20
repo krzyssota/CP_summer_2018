@@ -33,7 +33,7 @@ public class LogBase {
         }
         if (fet==1) {
             Beverage beverage = new Espresso(lastBevID++, user, dose, waterUsed, temperature, time, type, score, grindLevel, tds, tds*waterUsed/dose);
-            bevsList.add(beverage); //TODO does extraction work?
+            bevsList.add(beverage);
             return beverage;
         }
         if (fet==2) {
@@ -41,7 +41,7 @@ public class LogBase {
             bevsList.add(beverage);
             return beverage;
         }
-        return null; //TODO handle exeption
+        return null;
     }
    /* public List<String> getListOfTypes(){
         List<String> typesList = new ArrayList();
@@ -117,7 +117,7 @@ public class LogBase {
     public List<Beverage> findBeveragesByUserID(Integer userID){
         List<Beverage> allBevsWithUserID= new ArrayList<>();
         for (Beverage bev : bevsList) {
-            if ( userID.equals(bev.getUser().getUserID())) {  //TODO add getter and setter in user
+            if ( userID.equals(bev.getUser().getUserID())) {
                 allBevsWithUserID.add(bev);
             }
         }

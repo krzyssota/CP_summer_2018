@@ -3,9 +3,13 @@ package pl.waw.sgh.myapp;
 import pl.waw.sgh.Strings;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ContainerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,17 +36,38 @@ public class BeverageLogsUI {
     private JButton saveRecipeButton;
     private JTextPane listOfBeveragesTextPane;
     private JComboBox fetComboBox;
+    private JSpinner userIDSpinner;
 
     LogBase logBase = new LogBase();
     User u1 = logBase.createUser("Krzys", "50/50");
     User u2 = logBase.createUser("Janka", "100/70");
+    User u3 = logBase.createUser("Julka", "60/70");
+    User u4 = logBase.createUser("Tosia", "50/60");
+    User u5 = logBase.createUser("Paweł", "100/100");
 
-    Beverage bev1 = logBase.createBeverage(0, u1, 12, 200, 95, "120s", "Kenya", 8, 15, 1.3, 0);
-    Beverage bev2 = logBase.createBeverage(0, u1, 12, 200, 97, "120s", "Kenya", 9, 14, 1.4, 0);
-    Beverage bev3 = logBase.createBeverage(2, u2, 6, 400, 70, "60s", "Green", 10, 0, 0, 1);
-    Beverage bev4 = logBase.createBeverage(2, u2, 6, 600, 70, "180s", "Green", 7, 0, 0, 2);
-    Beverage bev5 = logBase.createBeverage(0, u2, 12, 200, 97, "120s", "Brasil", 9, 14, 1.4, 0);
-    Beverage bev6 = logBase.createBeverage(0, u1, 12, 200, 97, "120s", "Brasil", 9, 14, 1.4, 0);
+    Beverage bev3 = logBase.createBeverage(2, u1, 8, 400, 90, "240s", "Oolong", 7, 0, 0, 1);
+    Beverage bev4 = logBase.createBeverage(2, u1, 8, 400, 90, "120s", "Oolong", 8, 0, 0, 2);
+    Beverage bev5 = logBase.createBeverage(2, u1, 6, 300, 95, "60s", "Pu-ehr", 9, 0, 0, 1);
+
+    Beverage bev8 = logBase.createBeverage(2, u2, 6, 400, 70, "60s", "Green", 10, 0, 0, 1);
+    Beverage bev9 = logBase.createBeverage(2, u2, 6, 600, 70, "180s", "Green", 7, 0, 0, 2);
+    Beverage bev10 = logBase.createBeverage(1, u2, 12, 50, 93, "120s", "Brasil", 9, 4, 19, 0);
+
+    Beverage bev1 = logBase.createBeverage(0, u3, 12, 200, 95, "120s", "Kenya", 8, 15, 1.3, 1);
+    Beverage bev2 = logBase.createBeverage(0, u3, 12, 200, 97, "120s", "Kenya", 9, 14, 1.4, 1);
+    Beverage bev6 = logBase.createBeverage(0, u3, 12, 200, 97, "120s", "Brasil", 9, 14, 1.4, 1);
+    Beverage bev7 = logBase.createBeverage(1, u3, 17, 40, 93, "35s", "Brasil", 4, 7, 9.6, 1);
+
+    Beverage bev11 = logBase.createBeverage(1, u4, 20, 40, 94, "24s", "Colombia", 7, 7, 9.2, 1);
+    Beverage bev12 = logBase.createBeverage(1, u4, 20, 55, 94, "32s", "Colombia", 6, 5, 9.8, 1);
+    Beverage bev13 = logBase.createBeverage(1, u4, 20, 50, 94, "28s", "Colombia", 9, 6, 9.5, 1);
+
+    Beverage bev14 = logBase.createBeverage(2, u5, 4, 400, 85, "120s", "White", 7, 0, 0, 1);
+    Beverage bev15 = logBase.createBeverage(2, u5, 4, 300, 85, "180s", "White", 9, 0, 0, 2);
+    Beverage bev16 = logBase.createBeverage(1, u5, 18, 300, 95, "150s", "Panama", 10, 20, 1.2, 1);
+
+
+
 
 
     private User curUser;
@@ -54,8 +79,8 @@ public class BeverageLogsUI {
         showRecipesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                logBase.findBeveragesByUserID(Integer.parseInt(userIDTextField.getText()));
-                listOfBeveragesTextPane.setText(logBase.findBeveragesByUserID(Integer.parseInt(userIDTextField.getText())).toString());
+                int currentUserID = (Integer) userIDSpinner.getValue();
+                listOfBeveragesTextPane.setText(logBase.findBeveragesByUserID(currentUserID).toString());
             }
         });
 
@@ -76,8 +101,7 @@ public class BeverageLogsUI {
         saveRecipeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) { //TODO check if user does exist
-                User user = logBase.findUserByID(Integer.parseInt(userIDTextField.getText()));
-                System.out.println(user);
+
                 String fetString = (String) fetComboBox.getSelectedItem();
                 int fetInt = 0;
                 switch (fetString) {
@@ -90,12 +114,17 @@ public class BeverageLogsUI {
                     case "Tea":
                         fetInt = 2;
                         break;
+                    default:
+                        break;
                 }
+
+                int currentUserID = (Integer) userIDSpinner.getValue();
+                User currentUser = logBase.findUserByID(currentUserID);
+
                 logBase.createBeverage(
                         /*Integer.parseInt(fetTextField.getText()),*/
-
                         fetInt,
-                        user,
+                        currentUser,
                         Double.parseDouble(doseTextField.getText()),
                         Double.parseDouble(waterTextField.getText()),
                         Integer.parseInt(temperatureTextField.getText()),
@@ -106,18 +135,22 @@ public class BeverageLogsUI {
                         Double.parseDouble(tdsTextField.getText()),
                         Integer.parseInt(whichSteepingTextField.getText())
                 );
-                System.out.println(logBase);
                 //createBeverage (int fet, User user, double dose, double waterUsed, int temperature
                 // String time, String type, int score, Integer grindLevel, double tds,  int noSteeps
+                JOptionPane.showMessageDialog(MainPanel, "Recipe\n" + logBase.bevsList.get(logBase.bevsList.size() - 1) + "\nsaved to user:\n" + currentUser);
             }
         });
         deleteCurrentUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showConfirmDialog(MainPanel, "Are you sure you want to delete user: " + logBase.findUserByID(Integer.parseInt(userIDTextField.getText())) + "?");
-                logBase.deleteUserAndHisHersBeverages(Integer.parseInt(userIDTextField.getText()));
+                int currentUserID = (Integer) userIDSpinner.getValue();
+                JOptionPane.showConfirmDialog(MainPanel, "Are you sure you want to delete user: " + logBase.findUserByID(currentUserID) + "?");
+                logBase.deleteUserAndHisHersBeverages(currentUserID);
+                userNameTextField.setText("");
+                userWaterTextField.setText("");
             }
         });
+
     }
 
     private void createUIComponents() {
@@ -134,12 +167,26 @@ public class BeverageLogsUI {
                 listOfBeveragesTextPane.setText(logBase.findBestRecipeByType(typeName).toString());
             }
         });
+
         String[] fetStrings = new String[3];
         fetStrings[0] = "Filter";
         fetStrings[1] = "Espresso";
         fetStrings[2] = "Tea";
         fetComboBox = new JComboBox(fetStrings);
         fetComboBox.setSelectedIndex(0);
+
+        int noOfID = logBase.usersList.size();
+        SpinnerNumberModel spinnerRange = new SpinnerNumberModel(0, 0, noOfID - 1, 1);
+        userIDSpinner = new JSpinner(spinnerRange);
+
+        userIDSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int currentUserID = (Integer) userIDSpinner.getValue();
+                userNameTextField.setText(logBase.findUserByID(currentUserID).getName());
+                userWaterTextField.setText(logBase.findUserByID(currentUserID).getWaterMineralization());
+            }
+        });
     }
 
     public static void main(String[] args) {
@@ -205,50 +252,46 @@ public class BeverageLogsUI {
         whichSteepingTextField = new JTextField();
         MainPanel.add(whichSteepingTextField, new com.intellij.uiDesigner.core.GridConstraints(11, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JLabel label4 = new JLabel();
-        label4.setText("Filter 0  Espresso 1  Tea 2");
-        MainPanel.add(label4, new com.intellij.uiDesigner.core.GridConstraints(6, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        label4.setText("Dose");
+        MainPanel.add(label4, new com.intellij.uiDesigner.core.GridConstraints(6, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label5 = new JLabel();
-        label5.setText("Dose");
-        MainPanel.add(label5, new com.intellij.uiDesigner.core.GridConstraints(6, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        label5.setText("Water used");
+        MainPanel.add(label5, new com.intellij.uiDesigner.core.GridConstraints(6, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label6 = new JLabel();
-        label6.setText("Water used");
-        MainPanel.add(label6, new com.intellij.uiDesigner.core.GridConstraints(6, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        label6.setText("Temperature");
+        MainPanel.add(label6, new com.intellij.uiDesigner.core.GridConstraints(6, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label7 = new JLabel();
-        label7.setText("Temperature");
-        MainPanel.add(label7, new com.intellij.uiDesigner.core.GridConstraints(6, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        label7.setText("Time");
+        MainPanel.add(label7, new com.intellij.uiDesigner.core.GridConstraints(8, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label8 = new JLabel();
-        label8.setText("Time");
-        MainPanel.add(label8, new com.intellij.uiDesigner.core.GridConstraints(8, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        label8.setText("Origin of coffee, Type of tea");
+        MainPanel.add(label8, new com.intellij.uiDesigner.core.GridConstraints(8, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label9 = new JLabel();
-        label9.setText("Type");
-        MainPanel.add(label9, new com.intellij.uiDesigner.core.GridConstraints(8, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        label9.setText("Score");
+        MainPanel.add(label9, new com.intellij.uiDesigner.core.GridConstraints(8, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label10 = new JLabel();
-        label10.setText("Score");
-        MainPanel.add(label10, new com.intellij.uiDesigner.core.GridConstraints(8, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        label10.setText("Grind Lever");
+        MainPanel.add(label10, new com.intellij.uiDesigner.core.GridConstraints(8, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label11 = new JLabel();
-        label11.setText("Grind Lever");
-        MainPanel.add(label11, new com.intellij.uiDesigner.core.GridConstraints(8, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        label11.setText("TDS");
+        MainPanel.add(label11, new com.intellij.uiDesigner.core.GridConstraints(10, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label12 = new JLabel();
-        label12.setText("TDS");
-        MainPanel.add(label12, new com.intellij.uiDesigner.core.GridConstraints(10, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label13 = new JLabel();
-        label13.setText("which Steeping");
-        MainPanel.add(label13, new com.intellij.uiDesigner.core.GridConstraints(10, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        label12.setText("which Steeping");
+        MainPanel.add(label12, new com.intellij.uiDesigner.core.GridConstraints(10, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         saveRecipeButton = new JButton();
         saveRecipeButton.setText("Save recipe");
         MainPanel.add(saveRecipeButton, new com.intellij.uiDesigner.core.GridConstraints(11, 3, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         listOfBeveragesTextPane = new JTextPane();
         MainPanel.add(listOfBeveragesTextPane, new com.intellij.uiDesigner.core.GridConstraints(12, 0, 1, 4, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        userIDTextField = new JTextField();
-        MainPanel.add(userIDTextField, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JSeparator separator1 = new JSeparator();
         MainPanel.add(separator1, new com.intellij.uiDesigner.core.GridConstraints(5, 0, 1, 4, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JSeparator separator2 = new JSeparator();
         MainPanel.add(separator2, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 4, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        final JLabel label14 = new JLabel();
-        label14.setText("Show best recipe of brewing:");
-        MainPanel.add(label14, new com.intellij.uiDesigner.core.GridConstraints(4, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(91, 8), null, 0, false));
+        final JLabel label13 = new JLabel();
+        label13.setText("Show best recipe of brewing:");
+        MainPanel.add(label13, new com.intellij.uiDesigner.core.GridConstraints(4, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(91, 8), null, 0, false));
         MainPanel.add(fetComboBox, new com.intellij.uiDesigner.core.GridConstraints(7, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        MainPanel.add(userIDSpinner, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
